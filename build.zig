@@ -21,7 +21,6 @@ pub fn build(b: *std.Build) !void {
     const dev_version_embed = b.createModule(.{
         .root_source_file = write_files_version.add("version-dev", dev_version),
     });
-    b.getInstallStep().dependOn(&b.addInstallFile(release_version_file, "version-release").step);
 
     const extrapkgs_mod = blk: {
         const generate_exe = b.addExecutable(.{
@@ -94,6 +93,7 @@ pub fn build(b: *std.Build) !void {
     const ci_step = b.step("ci", "The build/test step to run on the CI");
     ci_step.dependOn(b.getInstallStep());
     ci_step.dependOn(test_step);
+    ci_step.dependOn(&b.addInstallFile(release_version_file, "version-release").step);
     try ci(b, release_version_embed, msi, extrapkgs_mod, autoenv_cpu, ci_step);
 }
 

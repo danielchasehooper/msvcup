@@ -2782,6 +2782,9 @@ fn identifyPayload(payload_filename: []const u8) PayloadId {
     // 'shared', 'um' and 'winrt'
     if (std.mem.startsWith(u8, payload_filename, "Installers\\Windows SDK Desktop Headers "))
         return .sdk;
+    // contains core shared headers like winapifamily.h, apiset.h, sdkddkver.h, etc.
+    if (std.mem.startsWith(u8, payload_filename, "Installers\\Windows SDK OnecoreUap Headers "))
+        return .sdk;
     // contains a bunch of ".lib" file in the um directory
     if (std.mem.startsWith(u8, payload_filename, "Installers\\Windows SDK Desktop Libs "))
         return .sdk;
@@ -2792,6 +2795,9 @@ fn identifyPayload(payload_filename: []const u8) PayloadId {
 
     // contains cppwinrt and winrt headers
     if (std.mem.startsWith(u8, payload_filename, "Installers\\Windows SDK for Windows Store Apps Headers-"))
+        return .sdk;
+    // contains OnecoreUap store app headers
+    if (std.mem.startsWith(u8, payload_filename, "Installers\\Windows SDK for Windows Store Apps Headers OnecoreUap-"))
         return .sdk;
 
     // contains a bunch of core windows ".lib" files like ntdll, kernel32, etc, but also
